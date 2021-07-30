@@ -1,5 +1,6 @@
 package com.movieflix.domain.dto;
 
+import com.movieflix.domain.Video;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,14 +16,16 @@ public class VideoRequestDTO {
 
     @NotBlank
     @Size(min = 1, max = 50)
-    public String title;
+    private String title;
 
     @NotBlank
     @Size(min = 1, max = 50)
-    public String description;
+    private String description;
 
     @NotBlank
     @Size(min = 1, max = 50)
-    public String url;
+    private String url;
+
+    private String categoryId;
 
 }

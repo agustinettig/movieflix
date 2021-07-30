@@ -1,5 +1,6 @@
 package com.movieflix.configuration;
 
+import com.movieflix.exception.CategoryNotFoundException;
 import com.movieflix.exception.DataNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,11 @@ public class ControlExceptionHandler {
 
     @ExceptionHandler(DataNotFoundException.class)
     protected ResponseEntity<Object> handleException(DataNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    protected ResponseEntity<Object> handleException(CategoryNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

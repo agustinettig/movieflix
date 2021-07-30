@@ -2,6 +2,7 @@ package com.movieflix.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "videos")
@@ -16,4 +17,6 @@ public class Video {
     private String title;
     private String description;
     private String url;
+    @DBRef
+    private Category category;
 }

@@ -8,9 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 public class VideoResponseDTO {
 
-    public String id;
-    public String title;
-    public String description;
-    public String url;
+    private String id;
+    private String title;
+    private String description;
+    private String url;
+    private CategoryResponseDTO category;
 
 }
