@@ -2,7 +2,9 @@ package com.movieflix.controller;
 
 import com.movieflix.domain.dto.CategoryRequestDTO;
 import com.movieflix.domain.dto.CategoryResponseDTO;
+import com.movieflix.domain.dto.VideoResponseDTO;
 import com.movieflix.service.CategoryService;
+import com.movieflix.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    private final VideoService videoService;
 
     @GetMapping
     public List<CategoryResponseDTO> findAll() {
@@ -41,5 +45,10 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String id) {
         categoryService.delete(id);
+    }
+
+    @GetMapping("/{id}/videos")
+    public List<VideoResponseDTO> findVideosByCategoryId(@PathVariable String id) {
+        return videoService.findAllByCategory(id);
     }
 }

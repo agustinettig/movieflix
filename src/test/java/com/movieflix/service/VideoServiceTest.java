@@ -183,4 +183,15 @@ class VideoServiceTest {
         assertThrows(DataNotFoundException.class, () -> videoService.delete(id));
         verify(videoRepository, never()).deleteById(any());
     }
+
+    @Test
+    void findAllByCategory_whenCalled_shouldReturnVideoList() {
+        List<Video> videos = List.of(Video.builder().id("123").title("Title").description("Description").url("url").build());
+        List<VideoResponseDTO> expectedResponse = List.of(VideoResponseDTO.builder().id("123").title("Title").description("Description").url("url").build());
+        when(videoRepository.findByCategoryId("111")).thenReturn(videos);
+
+        List<VideoResponseDTO> response = videoService.findAllByCategory("111");
+
+        assertEquals(expectedResponse, response);
+    }
 }

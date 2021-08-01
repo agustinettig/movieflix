@@ -61,6 +61,12 @@ public class VideoService {
         videoRepository.deleteById(id);
     }
 
+    public List<VideoResponseDTO> findAllByCategory(String categoryId) {
+        return videoRepository.findByCategoryId(categoryId).stream()
+                .map(video -> modelMapper.map(video, VideoResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
     private void fillCategory(Video video, String requestCategoryId) {
         String categoryId = requestCategoryId != null ? requestCategoryId : defaultCategoryId;
         Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
