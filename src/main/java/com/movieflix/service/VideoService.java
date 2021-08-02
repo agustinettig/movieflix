@@ -1,6 +1,7 @@
 package com.movieflix.service;
 
 import com.movieflix.domain.Category;
+import com.movieflix.domain.QVideo;
 import com.movieflix.domain.Video;
 import com.movieflix.domain.dto.VideoRequestDTO;
 import com.movieflix.domain.dto.VideoResponseDTO;
@@ -8,10 +9,13 @@ import com.movieflix.exception.CategoryNotFoundException;
 import com.movieflix.exception.DataNotFoundException;
 import com.movieflix.repository.CategoryRepository;
 import com.movieflix.repository.VideoRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,10 +33,23 @@ public class VideoService {
     @Value("${default-category.id}")
     private String defaultCategoryId;
 
-    public List<VideoResponseDTO> findAll() {
-        return videoRepository.findAll().stream()
+    public List<VideoResponseDTO> findAll(String title) {
+        Predicate predicate = getPredicate(title);
+        List<Video> videos =  (List<Video>) videoRepository.findAll(predicate);
+        return videos.stream()
                 .map(video -> modelMapper.map(video, VideoResponseDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    private Predicate getPredicate(String title) {
+        QVideo qVideo = new QVideo("video");
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        if (StringUtils.hasText(title)) {
+            booleanBuilder.and(qVideo.title.containsIgnoreCase(title));
+        }
+
+        return booleanBuilder;
     }
 
     public VideoResponseDTO create(VideoRequestDTO videoRequest) {

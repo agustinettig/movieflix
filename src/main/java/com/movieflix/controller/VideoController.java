@@ -18,8 +18,8 @@ public class VideoController {
     private final VideoService videoService;
 
     @GetMapping
-    public List<VideoResponseDTO> findAll() {
-        return videoService.findAll();
+    public List<VideoResponseDTO> findAll(@RequestParam(required = false) String title) {
+        return videoService.findAll(title);
     }
 
     @PostMapping

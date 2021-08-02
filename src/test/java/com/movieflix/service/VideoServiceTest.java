@@ -10,6 +10,7 @@ import com.movieflix.exception.CategoryNotFoundException;
 import com.movieflix.exception.DataNotFoundException;
 import com.movieflix.repository.CategoryRepository;
 import com.movieflix.repository.VideoRepository;
+import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,9 +51,20 @@ class VideoServiceTest {
     void findAll_whenCalled_shouldReturnVideoList() {
         List<Video> videos = List.of(Video.builder().id("123").title("Title").description("Description").url("url").build());
         List<VideoResponseDTO> expectedResponse = List.of(VideoResponseDTO.builder().id("123").title("Title").description("Description").url("url").build());
-        when(videoRepository.findAll()).thenReturn(videos);
+        when(videoRepository.findAll(any(BooleanBuilder.class))).thenReturn(videos);
 
-        List<VideoResponseDTO> response = videoService.findAll();
+        List<VideoResponseDTO> response = videoService.findAll("");
+
+        assertEquals(expectedResponse, response);
+    }
+
+    @Test
+    void findAll_whenCalledWithTitleParam_shouldReturnVideoList() {
+        List<Video> videos = List.of(Video.builder().id("123").title("Title").description("Description").url("url").build());
+        List<VideoResponseDTO> expectedResponse = List.of(VideoResponseDTO.builder().id("123").title("Title").description("Description").url("url").build());
+        when(videoRepository.findAll(any(BooleanBuilder.class))).thenReturn(videos);
+
+        List<VideoResponseDTO> response = videoService.findAll("title");
 
         assertEquals(expectedResponse, response);
     }
