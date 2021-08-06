@@ -14,6 +14,8 @@ import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -33,12 +35,10 @@ public class VideoService {
     @Value("${default-category.id}")
     private String defaultCategoryId;
 
-    public List<VideoResponseDTO> findAll(String title) {
+    public Page<VideoResponseDTO> findAll(String title, Pageable page) {
         Predicate predicate = getPredicate(title);
-        List<Video> videos =  (List<Video>) videoRepository.findAll(predicate);
-        return videos.stream()
-                .map(video -> modelMapper.map(video, VideoResponseDTO.class))
-                .collect(Collectors.toList());
+        Page<Video> videos = videoRepository.findAll(predicate, page);
+        return videos.map(video -> modelMapper.map(video, VideoResponseDTO.class));
     }
 
     private Predicate getPredicate(String title) {

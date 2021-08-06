@@ -18,6 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -50,10 +54,10 @@ class VideoServiceTest {
     @Test
     void findAll_whenCalled_shouldReturnVideoList() {
         List<Video> videos = List.of(Video.builder().id("123").title("Title").description("Description").url("url").build());
-        List<VideoResponseDTO> expectedResponse = List.of(VideoResponseDTO.builder().id("123").title("Title").description("Description").url("url").build());
-        when(videoRepository.findAll(any(BooleanBuilder.class))).thenReturn(videos);
+        Page<VideoResponseDTO> expectedResponse = new PageImpl<>(List.of(VideoResponseDTO.builder().id("123").title("Title").description("Description").url("url").build()));
+        when(videoRepository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(new PageImpl<>(videos));
 
-        List<VideoResponseDTO> response = videoService.findAll("");
+        Page<VideoResponseDTO> response = videoService.findAll("", PageRequest.of(0, 10));
 
         assertEquals(expectedResponse, response);
     }
@@ -61,10 +65,10 @@ class VideoServiceTest {
     @Test
     void findAll_whenCalledWithTitleParam_shouldReturnVideoList() {
         List<Video> videos = List.of(Video.builder().id("123").title("Title").description("Description").url("url").build());
-        List<VideoResponseDTO> expectedResponse = List.of(VideoResponseDTO.builder().id("123").title("Title").description("Description").url("url").build());
-        when(videoRepository.findAll(any(BooleanBuilder.class))).thenReturn(videos);
+        Page<VideoResponseDTO> expectedResponse = new PageImpl<>(List.of(VideoResponseDTO.builder().id("123").title("Title").description("Description").url("url").build()));
+        when(videoRepository.findAll(any(BooleanBuilder.class), any(Pageable.class))).thenReturn(new PageImpl<>(videos));
 
-        List<VideoResponseDTO> response = videoService.findAll("title");
+        Page<VideoResponseDTO> response = videoService.findAll("title", PageRequest.of(0, 10));
 
         assertEquals(expectedResponse, response);
     }
